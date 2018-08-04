@@ -34,7 +34,7 @@ class App extends React.Component {
             <div className='popupOverlay'>
                 <div className='popUp'>
                     <button className='popUpButton' onClick={() => this.togglePopUp('showPeople')}>People</button>
-                    <button className='popUpButton'>Question</button>
+                    <button className='popUpButton' >Question</button>
                     <button className='cancel' onClick={() => this.togglePopUp('show')}>Cancel</button>
                 </div>
             </div>
@@ -73,7 +73,7 @@ class App extends React.Component {
                     className="-striped -highlight"
                 />
                 {this.state.show? this.renderPopUp() : ''}
-                {this.state.showPeople? <People togglePopUp={this.togglePopUp}/> : ''}
+                {this.state.showPeople? <People togglePopUp={this.togglePopUp} index={this.state.selectedIndex}/> : ''}
             </div>
         );
     }
