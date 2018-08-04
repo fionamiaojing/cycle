@@ -2,14 +2,15 @@
 // CycleData = [cycles]
 // cycles = {
 //     name: string,
+//     status: string
 //     people : [list of people object],
-//     questions: [list of question object],
+//     question: [list of question object],
 // }
 // peopleObj = {
 //     name: string,
 //     image: url,
 // }
-// quesitonsObj = {
+// quesitonObj = {
 //     des: desObj,
 //     answer: [strings],
 // };
