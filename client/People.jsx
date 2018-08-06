@@ -1,18 +1,27 @@
 import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { addPeople, deletePeople } from './action';
+import { addPeople, deletePeople, postPeople } from './action';
 const faker = require('faker');
 
 class People extends React.Component{
     constructor(props) {
         super(props);
-        this.people = this.props.cycleData[this.props.index].people;
+        // this.people = this.props.cycleData[this.props.index].people;
         this.state = {
+            people: this.props.cycleData[this.props.index].people,
             displaySearchBar: 'none',
             input: '',
             disableAdd: 'true',
         };
+    }
+
+    componentDidUpdate(prevProps){
+        if(prevProps.cycleData !== this.props.cycleData){
+            this.setState({          
+                people: this.props.cycleData[this.props.index].people
+            });
+        }
     }
 
     handleEditClick() {
@@ -44,9 +53,21 @@ class People extends React.Component{
 
     }
 
+    handleDelete(name) {
+        this.props.deletePeople(this.props.index, name);
+        //
+    }
+
     handleSave() {
         //ideally i should get the unique id (in database) of that person and only need to save id into cycle
         //call AddPeople function to push the new person into people array
+        //I don't quite understand the diff between save and submit, If possible, I will ask my manager to clarify that
+        // this.props.postPeople('username', this.props.index, {
+        //     name: this.state.input,
+        //     image: faker.image.avatar()
+        // });
+        //username should be saved somewhere
+        console.log('saved');
     }
     
     render() {
@@ -61,10 +82,11 @@ class People extends React.Component{
                     <hr/>
                     <br/>
                     Your selections:
-                    {this.people.map((person) => 
+                    {this.state.people.map((person) => 
                         <div>
                             <img className='avatar' src={person.image} alt=""/>
                             {person.name}
+                            <button onClick={() => this.handleDelete(person.name)}>Delete</button>
                         </div>
                     )}
                     <div style={{display: this.state.displaySearchBar}}>
@@ -100,7 +122,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return bindActionCreators({
         addPeople,
-        deletePeople
+        deletePeople,
+        postPeople
     }, dispatch);
 };
 

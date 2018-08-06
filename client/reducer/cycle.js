@@ -8,8 +8,11 @@ let cycleDataReducer = (state = initalState, action) => {
         case 'ADD_PEOPLE':
             let newState = state.slice();
             newState[action.payload.cycleIndex].people.push(action.payload.person);
-            console.log(newState);
             return newState;
+        case 'DELETE_PEOPLE':
+            let newState2 = state.slice();
+            newState2[action.payload.cycleIndex].people = newState2[action.payload.cycleIndex].people.filter(p => p.name !== action.payload.name);
+            return newState2;
         default: 
             //cycle is only considered COMPLETE when both people array and answer array within the questions array are filled
             return state.map((cycle) => {
