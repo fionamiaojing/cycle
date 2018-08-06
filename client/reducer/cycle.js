@@ -5,6 +5,11 @@ const initalState = generateCycleData();
 
 let cycleDataReducer = (state = initalState, action) => {
     switch (action.type) {
+        case 'ADD_PEOPLE':
+            let newState = state.slice();
+            newState[action.payload.cycleIndex].people.push(action.payload.person);
+            console.log(newState);
+            return newState;
         default: 
             //cycle is only considered COMPLETE when both people array and answer array within the questions array are filled
             return state.map((cycle) => {

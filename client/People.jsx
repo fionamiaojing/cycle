@@ -1,13 +1,17 @@
 import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { addPeople, deletePeople } from './action';
+const faker = require('faker');
 
 class People extends React.Component{
     constructor(props) {
         super(props);
         this.people = this.props.cycleData[this.props.index].people;
         this.state = {
-            displaySearchBar: 'none'
+            displaySearchBar: 'none',
+            input: '',
+            disableAdd: 'true',
         };
     }
 
@@ -19,10 +23,31 @@ class People extends React.Component{
         });
     }
 
-    handleSearch() {
-        
+    handleSearch(event) {
+        this.setState({
+            input: event.target.value
+        });
+        //I don't have people table so I just write some pseudoCode here
+        //filter people table based on search input
+        // - this.props.people.filter(person => person.toLowerCase() === event.target.value.toLowerCase());
+        //if the filter gets an valid result (length === 1), enable add button
+        this.setState({
+            disableAdd: ''
+        });
     }
 
+    handleAdd() {
+        this.props.addPeople(this.props.index, {
+            name: this.state.input,
+            image: faker.image.avatar()
+        });
+
+    }
+
+    handleSave() {
+        //ideally i should get the unique id (in database) of that person and only need to save id into cycle
+        //call AddPeople function to push the new person into people array
+    }
     
     render() {
 
@@ -45,14 +70,19 @@ class People extends React.Component{
                     <div style={{display: this.state.displaySearchBar}}>
                         <input
                             type="text"
+                            value={this.state.input}
                             placeholder="Type a team member's name..."
                             onChange={event => this.handleSearch(event)}
                             style={{width: '80%'}}
                         />
-                        <button>Add</button>
+                        <button 
+                            disabled={this.state.disableAdd}
+                            onClick={() => this.handleAdd()}
+                        >Add</button>
+                        <div>You must select at least two people</div>
                     </div>
                     {this.state.displaySearchBar === 'block' ?
-                        <button >SAVE</button> : 
+                        <button onClick={() => this.handleSave()}>SAVE</button> : 
                         <button onClick={() => this.handleEditClick()}>EDIT</button>}
                     <button onClick={() => this.props.togglePopUp('showPeople')}>Submit</button>
                 </div>
@@ -69,6 +99,8 @@ const mapStateToProps = (state) => {
   
 const mapDispatchToProps = (dispatch) => {
     return bindActionCreators({
+        addPeople,
+        deletePeople
     }, dispatch);
 };
 
